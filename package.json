@@ -1,0 +1,19 @@
+{
+  "author": {
+    "name": "Tom MacWright",
+    "url": "http://macwright.org/"
+  },
+  "name": "yell",
+  "description": "a yelp scraper",
+  "version": "0.0.1",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/tmcw/yell.git"
+  },
+  "engines": {
+    "node": ">= v0.4.0"
+  },
+  "dependencies": {
+    "node.io": "0.3.7"
+  }
+}
