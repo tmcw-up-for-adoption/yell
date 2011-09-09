@@ -18,3 +18,14 @@ However, section 5C makes it very clear that users own their contributed content
 Given that copying-and-pasting ones content out of Yelp is rather inconvenient, in
 order to make 5C a reality, this code breaks 6B iii. It's an unfortunate overlap of
 code and law.
+
+Yelp, for the most part, is doing a decent job - they publish reviews in
+the **hReview** microformat, and have APIs. And it's great that their TOS
+is fair in ownership to data. However, their APIs are for businesses,
+not users, and their TOS is unfair in access to data.
+
+## Running
+
+    npm install
+    node.io yell [your Yelp userid] > my_reviews.json
+    node yell_hreview.coffee my_reviews.json > my_reviews.html

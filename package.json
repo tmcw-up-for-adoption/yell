@@ -14,6 +14,8 @@
     "node": ">= v0.4.0"
   },
   "dependencies": {
-    "node.io": "0.3.7"
+    "node.io": "0.3.7",
+    "coffee-script": "1.1.2",
+    "underscore": "1.0.x"
   }
 }
