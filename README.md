@@ -1,9 +1,15 @@
-This is a Yelp scraper. It's written to work with [node.io](http://ds.io/qyhaTF),
-so it's admittedly a bit easier to use for existing [nodejs](http://nodejs.org)
-fanatics.
+```
+~/⇾ yell YOUR_USER_ID
+fetching articles starting with 0
+fetching articles starting with 10
+fetching articles starting with 20
+fetching articles starting with 30
+fetching articles starting with 40
 
-It's written in [CoffeeScript](http://jashkenas.github.com/coffee-script/) for
-kicks.
+Finished! Find in this directory:
+- yelp.html, a hreview-formatted HTML version
+- yelp.json: raw JSON data.
+```
 
 **Using this code is against the Yelp Terms of Service** because they prevent
 users (in section 6B iii of their [terms of service](http://www.yelp.com/static?p=tos&country=US))
@@ -26,6 +32,12 @@ not users, and their TOS is unfair in access to data.
 
 ## Running
 
-    npm install
-    node.io yell [your Yelp userid] > my_reviews.json
-    node yell_hreview.coffee my_reviews.json > my_reviews.html
+Instead of `YOUR_YELP_USER_ID`, you should put your user id. Find this by going to Yelp,
+and to your user page, and looking in the URL. It'll be like:
+
+    http://www.yelp.com/user_details?userid=FDJLFJDSKL
+
+That end bit - the random letters after the `=`, is your userid.
+
+    npm install yell
+    yell YOUR_YELP_USER_ID
