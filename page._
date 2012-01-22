@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Yelp Export</title>
+        <style type='text/css'>
+            body {
+                font:14px/20px "Helvetica Neue";
+                width:640px;
+                margin:0 auto;
+                color:#222;
+            }
+            h1 {
+                font:24px/30px "Helvetica Neue";
+                margin:10px 0;
+            }
+            h4 {
+                font:18px/20px "Helvetica Neue";
+                margin:10px 0;
+                display:inline;
+            }
+            span.rating-wrapper {
+                font:12px/20px "Helvetica Neue";
+                color:#ccc;
+            }
+            span.rating-wrapper .rating {
+                color:#aaa;
+            }
+            div.rating-bar {
+                background:#eee;
+                border-top:1px solid #ccc;
+                height:4px;
+            }
+            div.rating-bar .inner {
+                background:#aaa;
+                height:4px;
+            }
+            div.rating-1 { width:128px; }
+            div.rating-2 { width:256px; }
+            div.rating-3 { width:384px; }
+            div.rating-4 { width:512px; }
+            div.rating-5 { width:640px; }
+        </style>
+    </head>
+    <body>
+        <h1>My Reviews</h1>
+        <% reviews.forEach(function(r) { %>
+        <div class="hreview">
+          <div class='rating-header'>
+              <h4 class="fn org summary"><%= r.name %></h4> <span class='rating-wrapper'>
+                  <span class="rating"><%= r.stars %></span> out of 5 stars
+              </span>
+          </div>
+          <div class='rating-bar'>
+              <div class='inner rating-<%= r.stars %>'>&nbsp;</div>
+          </div>
+
+          <div class="description item vcard"><p>
+            <%= r.text %>
+          </p></div>
+        </div>
+        <% }); %>
+    </body>
+</html>

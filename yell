@@ -1,0 +1,55 @@
+#!/usr/bin/env node
+
+var cheerio = require('cheerio'),
+    fs = require('fs'),
+    path = require('path'),
+    _ = require('underscore'),
+    get = require('get');
+
+var userid = process.argv[2],
+    itr = 0,
+    reviews = [];
+
+if (!userid) throw "Please specify a Yelp userid as the only argument to this " +
+        "utility. Find it by going to your profile page and looking int he URL.";
+
+function yurl(start) {
+    console.log('fetching articles starting with ' + start);
+    return 'http://www.yelp.com/user_details_reviews_self?userid=' +
+        userid + '&rec_pagestart=' + start;
+}
+
+function done(reviews) {
+    fs.writeFileSync('yelp.json', JSON.stringify(reviews), 'utf8');
+    draw(reviews);
+    console.log('\nFinished! Find in this directory:\n- yelp.html, a hreview-formatted HTML version\n- yelp.json: raw JSON data.');
+}
+
+function draw(r) {
+    fs.writeFileSync('yelp.html', _.template(fs.readFileSync(path.join(__dirname, 'page._'), 'utf8'))({
+        reviews: r
+    }), 'utf8');
+}
+
+function load(n) {
+    get({ uri: yurl(n) }).asString(function(err, str) {
+        if (err) throw err;
+
+        var $ = cheerio.load(str);
+        $('div.review').each(function(i, elem) {
+            reviews.push({
+                text: $(this).children('div.review_comment').text(),
+                name: $(this).children('h4 a').text(),
+                stars: parseInt($(this).children('span.star-img img').attr('alt'), 10),
+                id:  $(this).children('h4 a').attr('href').match(/\/biz\/([\d\w\-]*)/)[1]
+            });
+        });
+        if ($('#pager_page_next').length) {
+            load(n + 10);
+        } else {
+            done(reviews);
+        }
+    });
+}
+
+load(0);
