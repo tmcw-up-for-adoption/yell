@@ -40,7 +40,7 @@ function load(n) {
             reviews.push({
                 text: $(this).children('div.review_comment').text(),
                 name: $(this).children('h4 a').text(),
-                stars: parseInt($(this).children('span.star-img img').attr('alt'), 10),
+                stars: parseInt($(this).find('i.star-img img').attr('alt'), 10),
                 id:  $(this).children('h4 a').attr('href').match(/\/biz\/([\d\w\-]*)/)[1]
             });
         });
