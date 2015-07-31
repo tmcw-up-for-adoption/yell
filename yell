@@ -11,7 +11,7 @@ var userid = process.argv[2],
     reviews = [];
 
 if (!userid) throw "Please specify a Yelp userid as the only argument to this " +
-        "utility. Find it by going to your profile page and looking int he URL.";
+        "utility. Find it by going to your profile page and looking in the URL.";
 
 function yurl(start) {
     console.log('fetching articles starting with ' + start);
