@@ -38,10 +38,10 @@ function load(n) {
         var $ = cheerio.load(str);
         $('div.review').each(function(i, elem) {
             reviews.push({
-                text: $(this).children('div.review_comment').text(),
-                name: $(this).children('h4 a').text(),
-                stars: parseInt($(this).find('i.star-img img').attr('alt'), 10),
-                id:  $(this).children('h4 a').attr('href').match(/\/biz\/([\d\w\-]*)/)[1]
+                text: $(elem).find('[lang=en]').text(),
+                name: $(this).children('a.biz-name').text(),
+                stars: $(this).children('i.star-img').attr('title'),
+                id: $(this).attr('data-review-id')
             });
         });
         if ($('#pager_page_next').length) {
