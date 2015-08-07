@@ -5,7 +5,7 @@
   },
   "name": "yell",
   "description": "a yelp scraper",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "repository": {
     "type": "git",
     "url": "git://github.com/tmcw/yell.git"
@@ -19,6 +19,6 @@
     "get": "1.1.2"
   },
   "bin": {
-      "yell": "yell"
+    "yell": "yell"
   }
 }
