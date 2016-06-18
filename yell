@@ -44,7 +44,7 @@ function load(n) {
                 id: $(this).attr('data-review-id')
             });
         });
-        if ($('#pager_page_next').length) {
+        if ($('.next.pagination-links_anchor').length) {
             load(n + 10);
         } else {
             done(reviews);
