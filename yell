@@ -4,11 +4,15 @@ var cheerio = require('cheerio'),
     fs = require('fs'),
     path = require('path'),
     _ = require('underscore'),
-    get = require('get');
+    get = require('get'),
+    request = require('request');
 
 var userid = process.argv[2],
+    shouldDownloadPhotos = (process.argv[3] == '-photos'),
     itr = 0,
-    reviews = [];
+    finishCount = 0,
+    reviews = [],
+    photos = [];
 
 if (!userid) throw "Please specify a Yelp userid as the only argument to this " +
         "utility. Find it by going to your profile page and looking in the URL.";
@@ -19,10 +23,20 @@ function yurl(start) {
         userid + '&rec_pagestart=' + start;
 }
 
-function done(reviews) {
+function ypurl(start) {
+    console.log('fetching photo data starting with ' + start);
+    return 'http://www.yelp.com/user_local_photos?userid=' +
+        userid + '&start=' + start;
+}
+
+function rpurl(id) {
+    return 'https://s3-media3.fl.yelpcdn.com/bphoto/' + id + '/o.jpg';
+}
+
+function finishedReviews() {
     fs.writeFileSync('yelp.json', JSON.stringify(reviews), 'utf8');
     draw(reviews);
-    console.log('\nFinished! Find in this directory:\n- yelp.html, a hreview-formatted HTML version\n- yelp.json: raw JSON data.');
+    showFinishedMessage();
 }
 
 function draw(r) {
@@ -31,7 +45,7 @@ function draw(r) {
     }), 'utf8');
 }
 
-function load(n) {
+function loadReviews(n) {
     get({ uri: yurl(n) }).asString(function(err, str) {
         if (err) throw err;
 
@@ -45,11 +59,83 @@ function load(n) {
             });
         });
         if ($('.next.pagination-links_anchor').length) {
-            load(n + 10);
+            loadReviews(n + 10);
         } else {
-            done(reviews);
+            finishedReviews();
         }
     });
 }
 
-load(0);
+function loadPhotos(n) {
+    get({ uri: ypurl(n) }).asString(function(err, str) {
+        if (err) throw err;
+
+        var $ = cheerio.load(str);
+        $('ul.photo-box-grid li').each(function(i, elem) {
+            var id = $(elem).attr('data-photo-id');
+
+            photos.push({
+                location: $(this).children('div.photo-box-overlay_caption').text(),
+                url: rpurl(id),
+                id: id
+            });
+        });
+        if ($('.next.pagination-links_anchor').length) {
+            loadPhotos(n + 30);
+        } else {
+            downloadPhotos();
+        }
+    });
+}
+
+function downloadPhotos() {
+    makeDir('photos');
+
+    downloadPhoto(0);
+}
+
+function downloadPhoto(id) {
+    var photo = photos[id];
+
+    makeDir('photos/'+photo.location);
+    console.log('Downloading photo ' + (id+1) + ' of ' + photos.length);
+    request(photo.url).pipe(
+        fs.createWriteStream('photos/' + photo.location + '/' + photo.id + '.jpg')
+    ).on(
+        'close',
+        function() {
+            if( id < (photos.length - 1) ) {
+                downloadPhoto(id + 1);
+            } else {
+                showFinishedMessage();
+            }
+    });
+}
+
+function makeDir(path) {
+    try {
+        fs.mkdirSync(path);
+    } catch(e) {
+        // Silently continue
+    }
+}
+
+function showFinishedMessage() {
+    finishCount++;
+    var message = '\nFinished! Find in this directory:\n- yelp.html, a hreview-formatted HTML version\n- yelp.json: raw JSON data.';
+    var target = 1;
+
+    if(shouldDownloadPhotos) {
+        message += '\n- photos/: photos from yelp account';
+        target = 2;
+    }
+
+    if(finishCount == target)
+        console.log(message);
+}
+
+loadReviews(0);
+
+if(shouldDownloadPhotos){
+    loadPhotos(0);
+}
