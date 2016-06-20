@@ -72,10 +72,13 @@ function loadPhotos(n) {
 
         var $ = cheerio.load(str);
         $('ul.photo-box-grid li').each(function(i, elem) {
-            var id = $(elem).attr('data-photo-id');
+            var id = $(elem).attr('data-photo-id'),
+                location_name = $(this).children('div.photo-box-overlay_caption').text();
+
+            location_name = location_name.replace(/[\\|/]/g, '_');
 
             photos.push({
-                location: $(this).children('div.photo-box-overlay_caption').text(),
+                location: location_name,
                 url: rpurl(id),
                 id: id
             });
