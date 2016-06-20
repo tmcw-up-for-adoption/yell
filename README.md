@@ -39,14 +39,14 @@ and to your user page, and looking in the URL. It'll be like:
 
 That end bit - the random letters after the `=`, is your userid.
 
-    npm install yell
+    npm install -g yell
     yell YOUR_YELP_USER_ID
 
 ### Retrieving Photos
 
 If you wish to retrieve your photos as well as your reviews, simple add `-photos` to the end of the call.
 
-    npm install yell
+    npm install -g yell
     yell YOUR_YELP_USER_ID -photos
 
 Photos will be stored in a `photos` directory, grouped by the location, then photo ID i.e. `photos/Lyle's Cafè Shoreditch/d4E4Wh7cwjxRpLflGNwJIA.jpg`.
