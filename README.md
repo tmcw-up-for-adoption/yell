@@ -32,6 +32,8 @@ not users, and their TOS is unfair in access to data.
 
 ## Running
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/tmcw/yell.svg)](https://greenkeeper.io/)
+
 Instead of `YOUR_YELP_USER_ID`, you should put your user id. Find this by going to Yelp,
 and to your user page, and looking in the URL. It'll be like:
 
